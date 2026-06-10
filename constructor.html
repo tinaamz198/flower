@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Конструктор Букетов</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">🌸 Цветочный Рай</div>
+        <nav class="nav-menu">
+            <a href="index.html">Главная</a>
+            <a href="indoor.html">Комнатные растения</a>
+            <a href="garden.html">Садовые цветы</a>
+            <a href="decor.html">Декоративные</a>
+        </nav>
+    </header>
+
+    <main class="content flex-container">
+      <section class="constructor-box">
+    <h2>Сборка индивидуального букета</h2>
+    
+    <div class="constructor-section">
+        <h3>1. Выберите цветы и количество</h3>
+        
+        <div class="component-row">
+            <img src="images/tulip.jpg" alt="Тюльпан" class="preview-img">
+            <div class="component-info">
+                <label>Тюльпан (90 сом/шт)</label>
+                <input type="number" class="flower-quantity" data-price="90" min="0" max="101" value="0">
+            </div>
+        </div>
+
+        <div class="component-row">
+            <img src="images/siren.jpg" alt="Сирень" class="preview-img">
+            <div class="component-info">
+                <label>Сирень (120 сом/шт)</label>
+                <input type="number" class="flower-quantity" data-price="120" min="0" max="101" value="0">
+            </div>
+        </div>
+
+        <div class="component-row">
+            <img src="images/ranink.jpg" alt="Ранинкул" class="preview-img">
+            <div class="component-info">
+                <label>Ранинкул (130 сом/шт)</label>
+                <input type="number" class="flower-quantity" data-price="130" min="0" max="101" value="0">
+            </div>
+        </div>
+
+     <div class="component-row">
+            <img src="images/pion.jpg" alt="Пион" class="preview-img">
+            <div class="component-info">
+                <label>Пион (150 сом/шт)</label>
+                <input type="number" class="flower-quantity" data-price="150" min="0" max="101" value="0">
+            </div>
+        </div>
+
+     <div class="component-row">
+            <img src="images/magnol.jpg" alt="Магнолия" class="preview-img">
+            <div class="component-info">
+                <label>Магнолия (180 сом/шт)</label>
+                <input type="number" class="flower-quantity" data-price="180" min="0" max="101" value="0">
+            </div>
+        </div>
+
+
+     <div class="component-row">
+            <img src="images/lilie.jpg" alt="Лилия" class="preview-img">
+            <div class="component-info">
+                <label>Лилия (140 сом/шт)</label>
+                <input type="number" class="flower-quantity" data-price="140" min="0" max="101" value="0">
+            </div>
+        </div>
+    
+     <div class="component-row">
+            <img src="images/gorten.jpg" alt="Гортензия" class="preview-img">
+            <div class="component-info">
+                <label>Гортензия (160 сом/шт)</label>
+                <input type="number" class="flower-quantity" data-price="160" min="0" max="101" value="0">
+            </div>
+        </div>
+   
+
+   <div class="constructor-section">
+        <h3>2. Выберите зелень и количество</h3>
+        
+        <div class="component-row">
+            <img src="images/evkalipt.jpg" alt="Эвкалипт" class="preview-img">
+            <div class="component-info">
+                <label>Веточка эвкалипта (200 сом/шт)</label>
+                <input type="number" class="greens-quantity" data-price="200" min="0" max="50" value="0">
+            </div>
+        </div>
+
+        <div class="component-row">
+            <img src="images/salsl.jpg" alt="Сальсия" class="preview-img">
+            <div class="component-info">
+                <label>Веточка сальсии (120 сом/шт)</label>
+                <input type="number" class="greens-quantity" data-price="120" min="0" max="50" value="0">
+            </div>
+        </div>
+
+        <div class="component-row">
+            <img src="images/Pistacia.jpg" alt="Фисташка" class="preview-img">
+            <div class="component-info">
+                <label>Веточка фисташки (120 сом/шт)</label>
+                <input type="number" class="greens-quantity" data-price="120" min="0" max="50" value="0">
+            </div>
+        </div>
+
+        <div class="component-row">
+            <img src="images/Cineraria.jpg" alt="Синерия" class="preview-img">
+            <div class="component-info">
+                <label>Веточка синерии (120 сом/шт)</label>
+                <input type="number" class="greens-quantity" data-price="120" min="0" max="50" value="0">
+            </div>
+        </div>
+        
+    </div>
+    <div class="constructor-section">
+        <h3>3. Куда положить (Упаковка)</h3>
+        <div class="component-row">
+            <div class="component-info">
+                <select id="decor">
+                    <option value="none" data-price="0" >Просто перевязать лентой (0 сом)</option>
+                    <option value="craft" data-price="150" >Крафтовая бумага (+150 сом)</option>
+                    <option value="box" data-price="500" >Шляпная коробка премиум (+500 сом)</option>
+                    <option value="basket" data-price="700">Плетёная корзина (+700 сом)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="total-price">
+        Окончательная цена: <span id="totalPrice">0</span> сом
+    </div>
+</section>
+        <section class="form-box">
+            <h2>Оформление доставки</h2>
+            <form id="orderForm" novalidate>
+                <div class="form-group">
+                    <label for="username">Ваше Имя *</label>
+                    <input type="text" id="username" placeholder="Минимум 2 буквы">
+                    <span class="error-msg" id="nameError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="userphone">Номер телефона *</label>
+                    <input type="text" id="userphone" placeholder="0XXX XX XX XX">
+                    <span class="error-msg" id="phoneError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Адрес доставки *</label>
+                    <input type="text" id="address" placeholder="Город, улица, дом">
+                    <span class="error-msg" id="addressError"></span>
+                </div>
+
+                <button type="submit" class="submit-btn">Подтвердить заказ</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="js/constructor.js"></script>
+    <script src="js/validator.js"></script>
+</body>
+</html>
