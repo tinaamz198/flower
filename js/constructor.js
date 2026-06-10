@@ -49,7 +49,19 @@ document.addEventListener("DOMContentLoaded", () => {
     if (decorSelect) {
         decorSelect.addEventListener("change", calculateTotal);
     }
-
+// Функция для обновления скрытого поля цены в форме
+function syncPriceToForm() {
+    const total = document.getElementById("totalPrice").textContent;
+    // Создадим скрытое поле, если его еще нет, или найдем существующее
+    let hiddenPrice = document.getElementById("hiddenTotalPrice");
+    if (!hiddenPrice) {
+        hiddenPrice = document.createElement("input");
+        hiddenPrice.type = "hidden";
+        hiddenPrice.id = "hiddenTotalPrice";
+        document.getElementById("orderForm").appendChild(hiddenPrice);
+    }
+    hiddenPrice.value = total;
+}
     // Запускаем первичный расчет при загрузке страницы
     calculateTotal();
 });
