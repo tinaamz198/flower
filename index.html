@@ -8,7 +8,7 @@
 <body>
 
     <header class="main-header">
-        <div class="logo">🌸 Цветочный Рай</div>
+        <div class="logo">🌸 Цветочный Окии</div>
         <nav class="nav-menu">
             <a href="index.html" class="active">Главная</a>
             <a href="indoor.html">Комнатные растения</a>
@@ -27,60 +27,62 @@
         
         <div class="catalog-grid">
             <div class="flower-card">
-                <img src="images/1.jpg" alt="Букет Нежность">
+                <img src="images/bouquet/1.jpg" alt="Букет Нежность">
                 <div class="card-content">
                     <h3>Букет «Нежность»</h3>
                     <p class="info">Цена: <span class="price">6500</span> сом</p>
                     <p class="description">Состав: 15 розовых тюльпанов, оформление в нежный крафт с нежно-розовой атласной лентой.</p>
+                    <button class="buy-btn" data-bouquet="Букет «Нежность»" data-price="6500">Оформить заказ</button>
                 </div>
             </div>
 
             <div class="flower-card">
-                <img src="images/2.jpg" alt="Букет Яркий день">
+                <img src="images/bouquet/2.jpg" alt="Букет Яркий день">
                 <div class="card-content">
                     <h3>Букет «Яркий День»</h3>
                     <p class="info">Цена: <span class="price">4200</span> сом</p>
-                    <p class="description">Состав: Смесь ярких гербер, желтых кустовых роз и веточек эвкалипта в стильной корейской упаковке.</p>
+                    <p class="description">Состав: Смесь ярких гербер, желтых кустовых роз и пушистых веточек фисташки в стильной корейской упаковке.</p>
+                    <button class="buy-btn" data-bouquet="Букет «Яркий День»" data-price="4200">Оформить заказ</button>
                 </div>
             </div>
 
             <div class="flower-card">
-                <img src="images/3.jpg" alt="Букет Яркий день">
+                <img src="images/bouquet/3.jpg" alt="Букет Белое Облако">
                 <div class="card-content">
-                    <h3>Букет «Яркий День»</h3>
+                    <h3>Букет «Белое Облако»</h3>
                     <p class="info">Цена: <span class="price">7500</span> сом</p>
-                    <p class="description">Состав: Смесь ярких гербер, желтых кустовых роз и веточек эвкалипта в стильной корейской упаковке.</p>
-                
+                    <p class="description">Состав: Пышные белые гортензии, веточки серебристого эвкалипта Синерия, упакованные в матовую кальку.</p>
+                    <button class="buy-btn" data-bouquet="Букет «Белое Облако»" data-price="7500">Оформить заказ</button>
                 </div>
             </div>
 
             <div class="flower-card">
-                <img src="images/4.jpg" alt="Букет Яркий день">
+                <img src="images/bouquet/4.jpg" alt="Букет Романтика">
                 <div class="card-content">
-                    <h3>Букет «Яркий День»</h3>
+                    <h3>Букет «Романтика»</h3>
                     <p class="info">Цена: <span class="price">8700</span> сом</p>
-                    <p class="description">Состав: Смесь ярких гербер, желтых кустовых роз и веточек эвкалипта в стильной корейской упаковке.</p>
-            
+                    <p class="description">Состав: 21 красная роза Эквадор, изящные ветви итальянского рускуса, перевязанные широкой атласной лентой.</p>
+                    <button class="buy-btn" data-bouquet="Букет «Романтика»" data-price="8700">Оформить заказ</button>
                 </div>
             </div>
 
             <div class="flower-card">
-                <img src="images/5.jpg" alt="Букет Яркий день">
+                <img src="images/bouquet/5.jpg" alt="Букет Весеннее Утро">
                 <div class="card-content">
-                    <h3>Букет «Яркий День»</h3>
+                    <h3>Букет «Весеннее Утро»</h3>
                     <p class="info">Цена: <span class="price">4500</span> сом</p>
-                    <p class="description">Состав: Смесь ярких гербер, желтых кустовых роз и веточек эвкалипта в стильной корейской упаковке.</p>
-                   
+                    <p class="description">Состав: Нежные альстромерии, белые кустовые ромашки и веточки воздушного аспарагуса в крафте.</p>
+                    <button class="buy-btn" data-bouquet="Букет «Весеннее Утро»" data-price="4500">Оформить заказ</button>
                 </div>
             </div>
 
             <div class="flower-card">
-                <img src="images/6.jpg" alt="Букет Яркий день">
+                <img src="images/bouquet/6.jpg" alt="Букет Тайный Сад">
                 <div class="card-content">
-                    <h3>Букет «Яркий День»</h3>
+                    <h3>Букет «Тайный Сад»</h3>
                     <p class="info">Цена: <span class="price">9600</span> сом</p>
-                    <p class="description">Состав: Смесь ярких гербер, желтых кустовых роз и веточек эвкалипта в стильной корейской упаковке.</p>
-                    
+                    <p class="description">Состав: Пионовидные розы, сиреневая лизиантус, бархатные резные листья цинерарии в премиальной шляпной коробке.</p>
+                    <button class="buy-btn" data-bouquet="Букет «Тайный Сад»" data-price="9600">Оформить заказ</button>
                 </div>
             </div>
         </div>
@@ -91,5 +93,164 @@
         </div>
     </main>
 
+  <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h3>Оформление заказа</h3>
+            <p id="modalBouquetInfo"></p>
+            
+            <form class="modal-form" id="fastOrderForm">
+                <input type="hidden" id="selectedBouquetName" name="bouquet_name">
+                <input type="hidden" id="selectedBouquetPrice" name="bouquet_price">
+
+                <label>Ваше имя:
+                    <input type="text" id="username" placeholder="Введите ваше имя" required>
+                    <span class="error-msg" id="nameError"></span>
+                </label>
+                
+                <label>Телефон:
+                    <input type="tel" id="userphone" placeholder="0707 12-34-56" required>
+                    <span class="error-msg" id="phoneError"></span>
+                </label>
+                
+                <label>Адрес доставки:
+                    <input type="text" id="address" placeholder="Улица, дом, квартира" required>
+                    <span class="error-msg" id="addressError"></span>
+                </label>
+                
+                <label>Способ оплаты:
+                    <select>
+                        <option value="cash">Наличными курьеру</option>
+                        <option value="o-dengi">О!Деньги / Элсом</option>
+                        <option value="card">Картой онлайн</option>
+                    </select>
+                </label>
+                <button type="submit" class="order-submit-btn">Подтвердить заказ</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("orderModal");
+    const closeModalBtn = document.getElementById("closeModal");
+    const modalBouquetInfo = document.getElementById("modalBouquetInfo");
+    
+    // Элементы формы
+    const form = document.getElementById("fastOrderForm");
+    const username = document.getElementById("username");
+    const userphone = document.getElementById("userphone");
+    const address = document.getElementById("address");
+    const hiddenNameInput = document.getElementById("selectedBouquetName");
+    const hiddenPriceInput = document.getElementById("selectedBouquetPrice");
+    
+    const buyButtons = document.querySelectorAll(".buy-btn");
+
+    // Открытие модального окна при клике на букет
+    buyButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const bouquetName = button.getAttribute("data-bouquet");
+            const bouquetPrice = button.getAttribute("data-price");
+
+            modalBouquetInfo.textContent = `Вы выбрали: ${bouquetName} (${bouquetPrice} сом)`;
+            hiddenNameInput.value = bouquetName;
+            hiddenPriceInput.value = bouquetPrice;
+
+            // Сброс ошибок и полей при открытии для нового букета
+            form.reset();
+            document.getElementById("nameError").textContent = "";
+            document.getElementById("phoneError").textContent = "";
+            document.getElementById("addressError").textContent = "";
+
+            modal.style.display = "flex";
+        });
+    });
+
+    // ИНТЕЛЛЕКТУАЛЬНАЯ МАСКА ВВОДА НОМЕРА ТЕЛЕФОНА (Формат: 0707 12-34-56)
+    userphone.addEventListener("input", (e) => {
+        let input = e.target.value.replace(/\D/g, ""); // Удаляем всё, кроме цифр
+        let formatted = "";
+
+        if (input.length > 0) {
+            // Если первая цифра не 0 (например, начали писать 707...), принудительно ставим 0 в начало
+            if (input[0] !== "0") {
+                input = "0" + input;
+            }
+            formatted = input.substring(0, 10); 
+        }
+        
+        // Форматируем по мере ввода структуры: 0XXX XX-XX-XX
+        if (input.length > 4) {
+            formatted = formatted.substring(0, 4) + " " + formatted.substring(4);
+        }
+        if (input.length > 6) {
+            formatted = formatted.substring(0, 7) + "-" + formatted.substring(7);
+        }
+        if (input.length > 8) {
+            formatted = formatted.substring(0, 10) + "-" + formatted.substring(10);
+        }
+
+        e.target.value = formatted;
+    });
+
+    // ВАЛИДАЦИЯ ПРИ ОТПРАВКЕ ФОРМЫ
+    form.addEventListener("submit", (e) => {
+        e.preventDefault(); 
+        
+        let isValid = true;
+
+        // Сброс сообщений об ошибках
+        document.getElementById("nameError").textContent = "";
+        document.getElementById("phoneError").textContent = "";
+        document.getElementById("addressError").textContent = "";
+
+        // 1. Проверка лимита на имя (Мин: 2 символа, Макс: 30 символов)
+        const nameValue = username.value.trim();
+        if (nameValue.length < 2) {
+            document.getElementById("nameError").textContent = "Ошибка: Имя слишком короткое (минимум 2 буквы)!";
+            isValid = false;
+        } else if (nameValue.length > 30) {
+            document.getElementById("nameError").textContent = "Ошибка: Имя не должно превышать 30 символов!";
+            isValid = false;
+        }
+
+        // 2. Проверка телефона по маске (Должно быть ровно 10 цифр)
+        const phoneDigits = userphone.value.replace(/\D/g, ""); 
+        if (phoneDigits.length !== 10) {
+            document.getElementById("phoneError").textContent = "Ошибка: Номер должен состоять ровно из 10 цифр!";
+            isValid = false;
+        }
+
+        // 3. Проверка лимита на адрес (Минимум 10 символов)
+        const addressValue = address.value.trim();
+        if (addressValue === "") {
+            document.getElementById("addressError").textContent = "Ошибка: Адрес доставки не может быть пустым!";
+            isValid = false;
+        } else if (addressValue.length < 10) {
+            document.getElementById("addressError").textContent = "Ошибка: Напишите подробнее (минимум 10 символов)!";
+            isValid = false;
+        }
+
+        // Если все проверки пройдены успешно
+        if (isValid) {
+            alert(`🎉 Заказ успешно принят!\n\nБукет: ${hiddenNameInput.value}\nКлиент: ${nameValue}\nТелефон: ${userphone.value}\nАдрес: ${addressValue}\nИтого к оплате: ${hiddenPriceInput.value} сом.`);
+            
+            modal.style.display = "none";
+            form.reset();
+        }
+    });
+
+    // Закрытие окон
+    closeModalBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+
+    window.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+});
+    </script>
 </body>
 </html>

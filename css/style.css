@@ -310,3 +310,147 @@ select:focus, input:focus {
 .hidden {
     display: none;
 }
+/* ==========================================================================
+   ИСПРАВЛЕННЫЕ СТИЛИ ДЛЯ МОДАЛЬНОГО ОКНА БЫСТРОГО ЗАКАЗА
+   ========================================================================== */
+
+/* Общий фон модального окна (затемнение) */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 10000; /* Перебиваем z-index шапки сайта (9999), чтобы окно было поверх неё */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    overflow-y: auto;
+    padding: 20px;
+    
+    /* Современное выравнивание строго по центру экрана */
+    display: none; 
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* Белая плашка контента */
+.modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    position: relative;
+    box-sizing: border-box;
+    margin: auto; /* Работает в паре с flex для защиты от вылетов */
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 22px;
+    color: #2c4c2e; /* Фирменный темный оттенок */
+}
+
+/* Информация о выбранном букете */
+#modalBouquetInfo {
+    font-weight: 600; 
+    color: #47824b; /* Наш благородный зеленый вместо розового */
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+/* Кнопка закрытия (крестик) */
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 26px;
+    cursor: pointer;
+    color: #aaa;
+    transition: color 0.2s;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+/* Форма внутри окна */
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
+.modal-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+    text-align: left;
+}
+
+/* Инпуты внутри модалки наследуют базовые стили проекта */
+.modal-form input, 
+.modal-form select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    background-color: #fafafa;
+    font-size: 15px;
+    color: #333;
+    outline: none;
+    transition: all 0.3s;
+}
+
+.modal-form input:focus, 
+.modal-form select:focus {
+    border-color: #47824b;
+    background-color: #ffffff;
+}
+
+/* Кнопка подтверждения в форме */
+.order-submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #47824b; /* Красим в стиль сайта */
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.order-submit-btn:hover {
+    background-color: #3b6b3e;
+}
+
+/* Кнопка "Оформить заказ" внутри карточки каталога */
+.buy-btn {
+    display: block;
+    width: 100%;
+    background-color: #47824b; /* Стиль сайта */
+    color: white;
+    text-align: center;
+    padding: 12px 0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 15px;
+    transition: background-color 0.3s;
+}
+
+.buy-btn:hover {
+    background-color: #3b6b3e;
+}
