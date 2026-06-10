@@ -13,7 +13,7 @@
             <a href="index.html" class="active">Главная</a>
             <a href="indoor.html">Комнатные растения</a>
             <a href="garden.html">Садовые цветы</a>
-            <a href="decor.html">Декоративные элементы</a>
+            <a href="decor.html">Декоративные растения</a>
         </nav>
     </header>
 
@@ -24,11 +24,25 @@
         </section>
 
         <h2>Наши готовые варианты букетов</h2>
+
+        <div class="tag-filters">
+            <button class="filter-btn active" data-filter="all">Все букеты</button>
+            <button class="filter-btn" data-filter="розы">Розы</button>
+            <button class="filter-btn" data-filter="тюльпаны">Тюльпаны</button>
+            <button class="filter-btn" data-filter="премиум">Премиум</button>
+            <button class="filter-btn" data-filter="бюджет">До 5000 сом</button>
+            <button class="filter-btn" data-filter="нежные">Нежные цвета</button>
+        </div>
         
         <div class="catalog-grid">
-            <div class="flower-card">
+            
+            <div class="flower-card" data-tags="тюльпаны нежные">
                 <img src="images/bouquet/1.jpg" alt="Букет Нежность">
                 <div class="card-content">
+                    <div class="card-tags">
+                        <span class="card-tag">#тюльпаны</span>
+                        <span class="card-tag">#нежные</span>
+                    </div>
                     <h3>Букет «Нежность»</h3>
                     <p class="info">Цена: <span class="price">6500</span> сом</p>
                     <p class="description">Состав: 15 розовых тюльпанов, оформление в нежный крафт с нежно-розовой атласной лентой.</p>
@@ -36,9 +50,13 @@
                 </div>
             </div>
 
-            <div class="flower-card">
+            <div class="flower-card" data-tags="розы бюджет">
                 <img src="images/bouquet/2.jpg" alt="Букет Яркий день">
                 <div class="card-content">
+                    <div class="card-tags">
+                        <span class="card-tag">#розы</span>
+                        <span class="card-tag">#бюджет</span>
+                    </div>
                     <h3>Букет «Яркий День»</h3>
                     <p class="info">Цена: <span class="price">4200</span> сом</p>
                     <p class="description">Состав: Смесь ярких гербер, желтых кустовых роз и пушистых веточек фисташки в стильной корейской упаковке.</p>
@@ -46,9 +64,13 @@
                 </div>
             </div>
 
-            <div class="flower-card">
+            <div class="flower-card" data-tags="нежные премиум">
                 <img src="images/bouquet/3.jpg" alt="Букет Белое Облако">
                 <div class="card-content">
+                    <div class="card-tags">
+                        <span class="card-tag">#нежные</span>
+                        <span class="card-tag">#премиум</span>
+                    </div>
                     <h3>Букет «Белое Облако»</h3>
                     <p class="info">Цена: <span class="price">7500</span> сом</p>
                     <p class="description">Состав: Пышные белые гортензии, веточки серебристого эвкалипта Синерия, упакованные в матовую кальку.</p>
@@ -56,9 +78,13 @@
                 </div>
             </div>
 
-            <div class="flower-card">
+            <div class="flower-card" data-tags="розы премиум">
                 <img src="images/bouquet/4.jpg" alt="Букет Романтика">
                 <div class="card-content">
+                    <div class="card-tags">
+                        <span class="card-tag">#розы</span>
+                        <span class="card-tag">#премиум</span>
+                    </div>
                     <h3>Букет «Романтика»</h3>
                     <p class="info">Цена: <span class="price">8700</span> сом</p>
                     <p class="description">Состав: 21 красная роза Эквадор, изящные ветви итальянского рускуса, перевязанные широкой атласной лентой.</p>
@@ -66,19 +92,27 @@
                 </div>
             </div>
 
-            <div class="flower-card">
+            <div class="flower-card" data-tags="бюджет нежные">
                 <img src="images/bouquet/5.jpg" alt="Букет Весеннее Утро">
                 <div class="card-content">
+                    <div class="card-tags">
+                        <span class="card-tag">#бюджет</span>
+                        <span class="card-tag">#нежные</span>
+                    </div>
                     <h3>Букет «Весеннее Утро»</h3>
                     <p class="info">Цена: <span class="price">4500</span> сом</p>
-                    <p class="description">Состав: Нежные альстромерии, белые кустовые ромашки и веточки воздушного аспарагуса в крафте.</p>
+                    <p class="description">Состав: Нежные альстромерии, белые кустовых ромашки и веточки воздушного аспарагуса в крафте.</p>
                     <button class="buy-btn" data-bouquet="Букет «Весеннее Утро»" data-price="4500">Оформить заказ</button>
                 </div>
             </div>
 
-            <div class="flower-card">
+            <div class="flower-card" data-tags="розы премиум">
                 <img src="images/bouquet/6.jpg" alt="Букет Тайный Сад">
                 <div class="card-content">
+                    <div class="card-tags">
+                        <span class="card-tag">#розы</span>
+                        <span class="card-tag">#премиум</span>
+                    </div>
                     <h3>Букет «Тайный Сад»</h3>
                     <p class="info">Цена: <span class="price">9600</span> сом</p>
                     <p class="description">Состав: Пионовидные розы, сиреневая лизиантус, бархатные резные листья цинерарии в премиальной шляпной коробке.</p>
@@ -93,7 +127,7 @@
         </div>
     </main>
 
-  <div id="orderModal" class="modal">
+    <div id="orderModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" id="closeModal">&times;</span>
             <h3>Оформление заказа</h3>
@@ -132,125 +166,122 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-    const modal = document.getElementById("orderModal");
-    const closeModalBtn = document.getElementById("closeModal");
-    const modalBouquetInfo = document.getElementById("modalBouquetInfo");
-    
-    // Элементы формы
-    const form = document.getElementById("fastOrderForm");
-    const username = document.getElementById("username");
-    const userphone = document.getElementById("userphone");
-    const address = document.getElementById("address");
-    const hiddenNameInput = document.getElementById("selectedBouquetName");
-    const hiddenPriceInput = document.getElementById("selectedBouquetPrice");
-    
-    const buyButtons = document.querySelectorAll(".buy-btn");
-
-    // Открытие модального окна при клике на букет
-    buyButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            const bouquetName = button.getAttribute("data-bouquet");
-            const bouquetPrice = button.getAttribute("data-price");
-
-            modalBouquetInfo.textContent = `Вы выбрали: ${bouquetName} (${bouquetPrice} сом)`;
-            hiddenNameInput.value = bouquetName;
-            hiddenPriceInput.value = bouquetPrice;
-
-            // Сброс ошибок и полей при открытии для нового букета
-            form.reset();
-            document.getElementById("nameError").textContent = "";
-            document.getElementById("phoneError").textContent = "";
-            document.getElementById("addressError").textContent = "";
-
-            modal.style.display = "flex";
-        });
-    });
-
-    // ИНТЕЛЛЕКТУАЛЬНАЯ МАСКА ВВОДА НОМЕРА ТЕЛЕФОНА (Формат: 0707 12-34-56)
-    userphone.addEventListener("input", (e) => {
-        let input = e.target.value.replace(/\D/g, ""); // Удаляем всё, кроме цифр
-        let formatted = "";
-
-        if (input.length > 0) {
-            // Если первая цифра не 0 (например, начали писать 707...), принудительно ставим 0 в начало
-            if (input[0] !== "0") {
-                input = "0" + input;
-            }
-            formatted = input.substring(0, 10); 
-        }
-        
-        // Форматируем по мере ввода структуры: 0XXX XX-XX-XX
-        if (input.length > 4) {
-            formatted = formatted.substring(0, 4) + " " + formatted.substring(4);
-        }
-        if (input.length > 6) {
-            formatted = formatted.substring(0, 7) + "-" + formatted.substring(7);
-        }
-        if (input.length > 8) {
-            formatted = formatted.substring(0, 10) + "-" + formatted.substring(10);
-        }
-
-        e.target.value = formatted;
-    });
-
-    // ВАЛИДАЦИЯ ПРИ ОТПРАВКЕ ФОРМЫ
-    form.addEventListener("submit", (e) => {
-        e.preventDefault(); 
-        
-        let isValid = true;
-
-        // Сброс сообщений об ошибках
-        document.getElementById("nameError").textContent = "";
-        document.getElementById("phoneError").textContent = "";
-        document.getElementById("addressError").textContent = "";
-
-        // 1. Проверка лимита на имя (Мин: 2 символа, Макс: 30 символов)
-        const nameValue = username.value.trim();
-        if (nameValue.length < 2) {
-            document.getElementById("nameError").textContent = "Ошибка: Имя слишком короткое (минимум 2 буквы)!";
-            isValid = false;
-        } else if (nameValue.length > 30) {
-            document.getElementById("nameError").textContent = "Ошибка: Имя не должно превышать 30 символов!";
-            isValid = false;
-        }
-
-        // 2. Проверка телефона по маске (Должно быть ровно 10 цифр)
-        const phoneDigits = userphone.value.replace(/\D/g, ""); 
-        if (phoneDigits.length !== 10) {
-            document.getElementById("phoneError").textContent = "Ошибка: Номер должен состоять ровно из 10 цифр!";
-            isValid = false;
-        }
-
-        // 3. Проверка лимита на адрес (Минимум 10 символов)
-        const addressValue = address.value.trim();
-        if (addressValue === "") {
-            document.getElementById("addressError").textContent = "Ошибка: Адрес доставки не может быть пустым!";
-            isValid = false;
-        } else if (addressValue.length < 10) {
-            document.getElementById("addressError").textContent = "Ошибка: Напишите подробнее (минимум 10 символов)!";
-            isValid = false;
-        }
-
-        // Если все проверки пройдены успешно
-        if (isValid) {
-            alert(`🎉 Заказ успешно принят!\n\nБукет: ${hiddenNameInput.value}\nКлиент: ${nameValue}\nТелефон: ${userphone.value}\nАдрес: ${addressValue}\nИтого к оплате: ${hiddenPriceInput.value} сом.`);
+            // --- КОД ДЛЯ МОДАЛЬНОГО ОКНА И ВАЛИДАЦИИ ФОРМЫ ---
+            const modal = document.getElementById("orderModal");
+            const closeModalBtn = document.getElementById("closeModal");
+            const modalBouquetInfo = document.getElementById("modalBouquetInfo");
             
-            modal.style.display = "none";
-            form.reset();
-        }
-    });
+            const form = document.getElementById("fastOrderForm");
+            const username = document.getElementById("username");
+            const userphone = document.getElementById("userphone");
+            const address = document.getElementById("address");
+            const hiddenNameInput = document.getElementById("selectedBouquetName");
+            const hiddenPriceInput = document.getElementById("selectedBouquetPrice");
+            
+            const buyButtons = document.querySelectorAll(".buy-btn");
 
-    // Закрытие окон
-    closeModalBtn.addEventListener("click", () => {
-        modal.style.display = "none";
-    });
+            buyButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const bouquetName = button.getAttribute("data-bouquet");
+                    const bouquetPrice = button.getAttribute("data-price");
 
-    window.addEventListener("click", (event) => {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    });
-});
+                    modalBouquetInfo.textContent = `Вы выбрали: ${bouquetName} (${bouquetPrice} сом)`;
+                    hiddenNameInput.value = bouquetName;
+                    hiddenPriceInput.value = bouquetPrice;
+
+                    form.reset();
+                    document.getElementById("nameError").textContent = "";
+                    document.getElementById("phoneError").textContent = "";
+                    document.getElementById("addressError").textContent = "";
+
+                    modal.style.display = "flex";
+                });
+            });
+
+            userphone.addEventListener("input", (e) => {
+                let input = e.target.value.replace(/\D/g, "");
+                let formatted = "";
+
+                if (input.length > 0) {
+                    if (input[0] !== "0") {
+                        input = "0" + input;
+                    }
+                    formatted = input.substring(0, 10); 
+                }
+                
+                if (input.length > 4) { formatted = formatted.substring(0, 4) + " " + formatted.substring(4); }
+                if (input.length > 6) { formatted = formatted.substring(0, 7) + "-" + formatted.substring(7); }
+                if (input.length > 8) { formatted = formatted.substring(0, 10) + "-" + formatted.substring(10); }
+
+                e.target.value = formatted;
+            });
+
+            form.addEventListener("submit", (e) => {
+                e.preventDefault(); 
+                let isValid = true;
+
+                document.getElementById("nameError").textContent = "";
+                document.getElementById("phoneError").textContent = "";
+                document.getElementById("addressError").textContent = "";
+
+                const nameValue = username.value.trim();
+                if (nameValue.length < 2) {
+                    document.getElementById("nameError").textContent = "Ошибка: Имя слишком короткое (минимум 2 буквы)!";
+                    isValid = false;
+                } else if (nameValue.length > 30) {
+                    document.getElementById("nameError").textContent = "Ошибка: Имя не должно превышать 30 символов!";
+                    isValid = false;
+                }
+
+                const phoneDigits = userphone.value.replace(/\D/g, ""); 
+                if (phoneDigits.length !== 10) {
+                    document.getElementById("phoneError").textContent = "Ошибка: Номер должен состоять ровно из 10 цифр!";
+                    isValid = false;
+                }
+
+                const addressValue = address.value.trim();
+                if (addressValue === "") {
+                    document.getElementById("addressError").textContent = "Ошибка: Адрес доставки не может быть пустым!";
+                    isValid = false;
+                } else if (addressValue.length < 10) {
+                    document.getElementById("addressError").textContent = "Ошибка: Напишите подробнее (минимум 10 символов)!";
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    alert(`🎉 Заказ успешно принят!\n\nБукет: ${hiddenNameInput.value}\nКлиент: ${nameValue}\nТелефон: ${userphone.value}\nАдрес: ${addressValue}\nИтого к оплате: ${hiddenPriceInput.value} сом.`);
+                    modal.style.display = "none";
+                    form.reset();
+                }
+            });
+
+            closeModalBtn.addEventListener("click", () => { modal.style.display = "none"; });
+            window.addEventListener("click", (event) => { if (event.target === modal) { modal.style.display = "none"; } });
+
+            // --- НОВЫЙ КОД: ЛОГИКА ФИЛЬТРАЦИИ ПО ТЕГАМ ---
+            const filterButtons = document.querySelectorAll(".filter-btn");
+            const flowerCards = document.querySelectorAll(".flower-card");
+
+            filterButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    // Убираем класс active у всех кнопок и добавляем текущей
+                    filterButtons.forEach(btn => btn.classList.remove("active"));
+                    button.classList.add("active");
+
+                    const filterValue = button.getAttribute("data-filter");
+
+                    flowerCards.forEach(card => {
+                        const cardTags = card.getAttribute("data-tags").split(" ");
+
+                        if (filterValue === "all" || cardTags.includes(filterValue)) {
+                            card.style.display = "flex"; // Показываем карточку
+                        } else {
+                            card.style.display = "none"; // Прячем карточку
+                        }
+                    });
+                });
+            });
+        });
     </script>
 </body>
 </html>
