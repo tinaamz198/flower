@@ -1,89 +1,80 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Находим основные элементы формы в DOM, чтобы работать с ними
     const form = document.getElementById("orderForm");
     const username = document.getElementById("username");
     const userphone = document.getElementById("userphone");
     const address = document.getElementById("address");
-    
-    // Элемент, который показывает текущую итоговую цену (из конструктора)
-    const totalPriceElement = document.getElementById("totalPrice");
 
-    // ИНТЕЛЛЕКТУАЛЬНАЯ МАСКА ТЕЛЕФОНА
-    // При каждом вводе символа форматируем номер под наш стандарт: 0XXX XX-XX-XX
+    // МАСКА ДЛЯ ТЕЛЕФОНА под требования ТЗ (+996XXXXXXXXX)
     userphone.addEventListener("input", (e) => {
-        let input = e.target.value.replace(/\D/g, ""); // Оставляем только цифры, удаляя всё лишнее
-        let formatted = "";
-
-        // Всегда начинаем номер с 0
-        if (input.length > 0) {
-            formatted = "0" + input.substring(1, 10);
+        let input = e.target.value.replace(/\D/g, "");
+        if (!input.startsWith("996")) {
+            input = "996" + input;
         }
-        
-        // Добавляем пробелы и дефисы на нужных позициях для красоты
-        if (input.length > 4) formatted = formatted.substring(0, 4) + " " + formatted.substring(4);
-        if (input.length > 6) formatted = formatted.substring(0, 7) + "-" + formatted.substring(7);
-        if (input.length > 8) formatted = formatted.substring(0, 10) + "-" + formatted.substring(10);
-
-        e.target.value = formatted; // Обновляем поле ввода уже отформатированным текстом
+        e.target.value = "+" + input.substring(0, 12);
     });
 
-    // ВАЛИДАЦИЯ ПРИ ОТПРАВКЕ
-    // Проверяем данные перед тем, как "отправить" их (пока просто выводим алерт)
     form.addEventListener("submit", (e) => {
-        e.preventDefault(); // Останавливаем стандартную отправку формы
+        e.preventDefault(); // Тормозим отправку для проверки
         
-        let isValid = true; // Флаг: считаем, что форма верна, пока не найдем ошибку
+        let isValid = true;
 
-        // Сбрасываем текст старых ошибок перед новой проверкой
         document.getElementById("nameError").textContent = "";
         document.getElementById("phoneError").textContent = "";
         document.getElementById("addressError").textContent = "";
 
-        // 1. Проверка Имени: не слишком ли короткое или длинное?
         const nameValue = username.value.trim();
-        if (nameValue.length < 2 || nameValue.length > 30) {
-            document.getElementById("nameError").textContent = "Введите имя от 2 до 30 символов.";
-            isValid = false; // Ошибка найдена, отправку блокируем
-        }
-
-        // 2. Проверка Телефона: проверяем количество цифр
-        const phoneDigits = userphone.value.replace(/\D/g, ""); 
-        if (phoneDigits.length !== 10) {
-            document.getElementById("phoneError").textContent = "Ошибка: номер должен быть 0XXX XX-XX-XX.";
+        if (nameValue.length < 2) {
+            document.getElementById("nameError").textContent = "Имя должно быть от 2 символов!";
             isValid = false;
         }
 
-        // 3. Проверка Адреса: должен быть подробным
+        const phoneDigits = userphone.value.replace(/\D/g, "");
+        if (phoneDigits.length !== 12) {
+            document.getElementById("phoneError").textContent = "Номер телефона должен быть в формате +996XXXXXXXXX!";
+            isValid = false;
+        }
+
         const addressValue = address.value.trim();
         if (addressValue.length < 10) {
-            document.getElementById("addressError").textContent = "Пожалуйста, укажите подробный адрес (мин. 10 символов).";
+            document.getElementById("addressError").textContent = "Введите более подробный адрес (мин. 10 символов)!";
             isValid = false;
         }
 
-        // 4. Проверка Цены: нельзя заказать пустой букет
-        const finalPrice = parseInt(totalPriceElement.textContent) || 0;
-        if (finalPrice <= 0) {
-            alert("Ошибка: Ваш букет пуст! Добавьте хотя бы один цветок.");
+        const finalPrice = parseFloat(document.getElementById("totalPrice").textContent || 0);
+        if (finalPrice === 0) {
+            alert("Ваш букет пуст! Соберите букет перед заказом.");
             isValid = false;
         }
 
-        // ЕСЛИ ВСЁ УСПЕШНО (isValid остался true)
+        // ЕСЛИ ВСЁ VALIID — ПЕРЕДАЕМ ДАННЫЕ В PHP И ОТПРАВЛЯЕМ ФОРМУ
         if (isValid) {
-            alert(`🎉 Заказ успешно принят!\n\nКлиент: ${nameValue}\nТелефон: ${userphone.value}\nАдрес: ${addressValue}\nИтого к оплате: ${finalPrice} сом.`);
+            let bouquetText = "";
             
-            // Очищаем саму форму ввода данных
-            form.reset();
-            
-            // Очищаем конструктор: сбрасываем счетчики цветов и зелени в 0
-            document.querySelectorAll(".flower-quantity, .greens-quantity").forEach(input => input.value = 0);
-            document.getElementById("decor").value = "none";
-            
-            // Обновляем итоговую цену на странице, вызывая функцию пересчета из другого файла
-            if (typeof calculateTotal === 'function') {
-                calculateTotal();
-            } else {
-                totalPriceElement.textContent = "0"; // Если функции нет, просто обнуляем текстом
-            }
+            document.querySelectorAll(".flower-quantity").forEach(input => {
+                const count = parseInt(input.value || 0);
+                if (count > 0) {
+                    const label = input.parentElement.querySelector("label").textContent.split('(')[0].trim();
+                    bouquetText += `• ${label}: ${count} шт.\n`;
+                }
+            });
+
+            document.querySelectorAll(".greens-quantity").forEach(input => {
+                const count = parseInt(input.value || 0);
+                if (count > 0) {
+                    const label = input.parentElement.querySelector("label").textContent.split('(')[0].trim();
+                    bouquetText += `• Зелень (${label}): ${count} шт.\n`;
+                }
+            });
+
+            const decorSelect = document.getElementById("decor");
+            bouquetText += `• Упаковка: ${decorSelect.options[decorSelect.selectedIndex].text}`;
+
+            // Закидываем всё в скрытые инпуты для отправки на бэкенд
+            document.getElementById("phpBouquetDetails").value = bouquetText;
+            document.getElementById("phpTotalPrice").value = finalPrice;
+
+            // Отправляем форму на настоящий PHP-сервер!
+            form.submit();
         }
     });
 });

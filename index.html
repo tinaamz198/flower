@@ -92,12 +92,13 @@
                 </div>
             </div>
 
-            <div class="flower-card" data-tags="бюджет нежные">
+            <div class="flower-card" data-tags="бюджет нежные тюльпаны">
                 <img src="images/bouquet/5.jpg" alt="Букет Весеннее Утро">
                 <div class="card-content">
                     <div class="card-tags">
                         <span class="card-tag">#бюджет</span>
                         <span class="card-tag">#нежные</span>
+                        <span class="card-tag">#тюльпаны</span>
                     </div>
                     <h3>Букет «Весеннее Утро»</h3>
                     <p class="info">Цена: <span class="price">4500</span> сом</p>
@@ -133,155 +134,159 @@
             <h3>Оформление заказа</h3>
             <p id="modalBouquetInfo"></p>
             
-            <form class="modal-form" id="fastOrderForm">
-                <input type="hidden" id="selectedBouquetName" name="bouquet_name">
-                <input type="hidden" id="selectedBouquetPrice" name="bouquet_price">
+           <form class="modal-form" id="fastOrderForm" action="process_order.php" method="POST" novalidate>
+    <input type="hidden" id="selectedBouquetName" name="bouquet_details">
+    <input type="hidden" id="selectedBouquetPrice" name="total_price">
 
-                <label>Ваше имя:
-                    <input type="text" id="username" placeholder="Введите ваше имя" required>
-                    <span class="error-msg" id="nameError"></span>
-                </label>
-                
-                <label>Телефон:
-                    <input type="tel" id="userphone" placeholder="0707 12-34-56" required>
-                    <span class="error-msg" id="phoneError"></span>
-                </label>
-                
-                <label>Адрес доставки:
-                    <input type="text" id="address" placeholder="Улица, дом, квартира" required>
-                    <span class="error-msg" id="addressError"></span>
-                </label>
-                
-                <label>Способ оплаты:
-                    <select>
-                        <option value="cash">Наличными курьеру</option>
-                        <option value="o-dengi">О!Деньги / Элсом</option>
-                        <option value="card">Картой онлайн</option>
-                    </select>
-                </label>
-                <button type="submit" class="order-submit-btn">Подтвердить заказ</button>
-            </form>
+    <label>Ваше имя:
+        <input type="text" id="username" name="name" placeholder="Введите ваше имя" required>
+        <span class="error-msg" id="nameError"></span>
+    </label>
+    
+    <label>Телефон:
+        <input type="tel" id="userphone" name="phone" placeholder="0707 12-34-56" required>
+        <span class="error-msg" id="phoneError"></span>
+    </label>
+    
+    <label>Адрес доставки:
+        <input type="text" id="address" name="address" placeholder="Улица, дом, квартира" required>
+        <span class="error-msg" id="addressError"></span>
+    </label>
+    
+    <label>Способ оплаты:
+        <select name="payment_method">
+            <option value="cash">Наличными курьеру</option>
+            <option value="o-dengi">О!Деньги / Элсом</option>
+            <option value="card">Картой онлайн</option>
+        </select>
+    </label>
+    <button type="submit" class="order-submit-btn">Подтвердить заказ</button>
+</form>
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // --- КОД ДЛЯ МОДАЛЬНОГО ОКНА И ВАЛИДАЦИИ ФОРМЫ ---
-            const modal = document.getElementById("orderModal");
-            const closeModalBtn = document.getElementById("closeModal");
-            const modalBouquetInfo = document.getElementById("modalBouquetInfo");
-            
-            const form = document.getElementById("fastOrderForm");
-            const username = document.getElementById("username");
-            const userphone = document.getElementById("userphone");
-            const address = document.getElementById("address");
-            const hiddenNameInput = document.getElementById("selectedBouquetName");
-            const hiddenPriceInput = document.getElementById("selectedBouquetPrice");
-            
-            const buyButtons = document.querySelectorAll(".buy-btn");
+   <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // --- КОД ДЛЯ МОДАЛЬНОГО ОКНА И ВАЛИДАЦИИ ФОРМЫ ---
+        const modal = document.getElementById("orderModal");
+        const closeModalBtn = document.getElementById("closeModal");
+        const modalBouquetInfo = document.getElementById("modalBouquetInfo");
+        
+        const form = document.getElementById("fastOrderForm");
+        const username = document.getElementById("username");
+        const userphone = document.getElementById("userphone");
+        const address = document.getElementById("address");
+        const hiddenNameInput = document.getElementById("selectedBouquetName");
+        const hiddenPriceInput = document.getElementById("selectedBouquetPrice");
+        
+        const buyButtons = document.querySelectorAll(".buy-btn");
 
-            buyButtons.forEach(button => {
-                button.addEventListener("click", () => {
-                    const bouquetName = button.getAttribute("data-bouquet");
-                    const bouquetPrice = button.getAttribute("data-price");
+        buyButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const bouquetName = button.getAttribute("data-bouquet");
+                const bouquetPrice = button.getAttribute("data-price");
 
-                    modalBouquetInfo.textContent = `Вы выбрали: ${bouquetName} (${bouquetPrice} сом)`;
-                    hiddenNameInput.value = bouquetName;
-                    hiddenPriceInput.value = bouquetPrice;
-
-                    form.reset();
-                    document.getElementById("nameError").textContent = "";
-                    document.getElementById("phoneError").textContent = "";
-                    document.getElementById("addressError").textContent = "";
-
-                    modal.style.display = "flex";
-                });
-            });
-
-            userphone.addEventListener("input", (e) => {
-                let input = e.target.value.replace(/\D/g, "");
-                let formatted = "";
-
-                if (input.length > 0) {
-                    if (input[0] !== "0") {
-                        input = "0" + input;
-                    }
-                    formatted = input.substring(0, 10); 
-                }
+                modalBouquetInfo.textContent = `Вы выбрали: ${bouquetName} (${bouquetPrice} сом)`;
                 
-                if (input.length > 4) { formatted = formatted.substring(0, 4) + " " + formatted.substring(4); }
-                if (input.length > 6) { formatted = formatted.substring(0, 7) + "-" + formatted.substring(7); }
-                if (input.length > 8) { formatted = formatted.substring(0, 10) + "-" + formatted.substring(10); }
+                // Передаем в скрытые инпуты данные о выбранном готовом букете
+                hiddenNameInput.value = `Готовый вариант: ${bouquetName}`;
+                hiddenPriceInput.value = bouquetPrice;
 
-                e.target.value = formatted;
-            });
-
-            form.addEventListener("submit", (e) => {
-                e.preventDefault(); 
-                let isValid = true;
-
+                form.reset();
                 document.getElementById("nameError").textContent = "";
                 document.getElementById("phoneError").textContent = "";
                 document.getElementById("addressError").textContent = "";
 
-                const nameValue = username.value.trim();
-                if (nameValue.length < 2) {
-                    document.getElementById("nameError").textContent = "Ошибка: Имя слишком короткое (минимум 2 буквы)!";
-                    isValid = false;
-                } else if (nameValue.length > 30) {
-                    document.getElementById("nameError").textContent = "Ошибка: Имя не должно превышать 30 символов!";
-                    isValid = false;
-                }
-
-                const phoneDigits = userphone.value.replace(/\D/g, ""); 
-                if (phoneDigits.length !== 10) {
-                    document.getElementById("phoneError").textContent = "Ошибка: Номер должен состоять ровно из 10 цифр!";
-                    isValid = false;
-                }
-
-                const addressValue = address.value.trim();
-                if (addressValue === "") {
-                    document.getElementById("addressError").textContent = "Ошибка: Адрес доставки не может быть пустым!";
-                    isValid = false;
-                } else if (addressValue.length < 10) {
-                    document.getElementById("addressError").textContent = "Ошибка: Напишите подробнее (минимум 10 символов)!";
-                    isValid = false;
-                }
-
-                if (isValid) {
-                    alert(`🎉 Заказ успешно принят!\n\nБукет: ${hiddenNameInput.value}\nКлиент: ${nameValue}\nТелефон: ${userphone.value}\nАдрес: ${addressValue}\nИтого к оплате: ${hiddenPriceInput.value} сом.`);
-                    modal.style.display = "none";
-                    form.reset();
-                }
+                modal.style.display = "flex";
             });
+        });
 
-            closeModalBtn.addEventListener("click", () => { modal.style.display = "none"; });
-            window.addEventListener("click", (event) => { if (event.target === modal) { modal.style.display = "none"; } });
+        // МАСКА ДЛЯ ТЕЛЕФОНА (Форматирует строго под ваши правила)
+        userphone.addEventListener("input", (e) => {
+            let input = e.target.value.replace(/\D/g, "");
+            let formatted = "";
 
-            // --- НОВЫЙ КОД: ЛОГИКА ФИЛЬТРАЦИИ ПО ТЕГАМ ---
-            const filterButtons = document.querySelectorAll(".filter-btn");
-            const flowerCards = document.querySelectorAll(".flower-card");
+            if (input.length > 0) {
+                if (input[0] !== "0") {
+                    input = "0" + input;
+                }
+                formatted = input.substring(0, 10); 
+            }
+            
+            if (input.length > 4) { formatted = formatted.substring(0, 4) + " " + formatted.substring(4); }
+            if (input.length > 6) { formatted = formatted.substring(0, 7) + "-" + formatted.substring(7); }
+            if (input.length > 8) { formatted = formatted.substring(0, 10) + "-" + formatted.substring(10); }
 
-            filterButtons.forEach(button => {
-                button.addEventListener("click", () => {
-                    // Убираем класс active у всех кнопок и добавляем текущей
-                    filterButtons.forEach(btn => btn.classList.remove("active"));
-                    button.classList.add("active");
+            e.target.value = formatted;
+        });
 
-                    const filterValue = button.getAttribute("data-filter");
+        // ВАЛИДАЦИЯ И ОТПРАВКА НА СЕРВЕР
+        form.addEventListener("submit", (e) => {
+            e.preventDefault(); // Запрещаем стандартную отправку ради валидации
+            
+            let isValid = true;
 
-                    flowerCards.forEach(card => {
-                        const cardTags = card.getAttribute("data-tags").split(" ");
+            document.getElementById("nameError").textContent = "";
+            document.getElementById("phoneError").textContent = "";
+            document.getElementById("addressError").textContent = "";
 
-                        if (filterValue === "all" || cardTags.includes(filterValue)) {
-                            card.style.display = "flex"; // Показываем карточку
-                        } else {
-                            card.style.display = "none"; // Прячем карточку
-                        }
-                    });
+            const nameValue = username.value.trim();
+            if (nameValue.length < 2) {
+                document.getElementById("nameError").textContent = "Ошибка: Имя слишком короткое (минимум 2 буквы)!";
+                isValid = false;
+            } else if (nameValue.length > 30) {
+                document.getElementById("nameError").textContent = "Ошибка: Имя не должно превышать 30 символов!";
+                isValid = false;
+            }
+
+            const phoneDigits = userphone.value.replace(/\D/g, ""); 
+            if (phoneDigits.length !== 10) {
+                document.getElementById("phoneError").textContent = "Ошибка: Номер должен состоять ровно из 10 цифр!";
+                isValid = false;
+            }
+
+            const addressValue = address.value.trim();
+            if (addressValue === "") {
+                document.getElementById("addressError").textContent = "Ошибка: Адрес доставки не может быть пустым!";
+                isValid = false;
+            } else if (addressValue.length < 10) {
+                document.getElementById("addressError").textContent = "Ошибка: Напишите подробнее (минимум 10 символов)!";
+                isValid = false;
+            }
+
+            // ЕСЛИ ВСЁ ПРАВИЛЬНО — ФОРМА УЛЕТАЕТ В PROCESS_ORDER.PHP
+            if (isValid) {
+                modal.style.display = "none";
+                form.submit(); // Метод принудительной отправки формы на бэкенд
+            }
+        });
+
+        closeModalBtn.addEventListener("click", () => { modal.style.display = "none"; });
+        window.addEventListener("click", (event) => { if (event.target === modal) { modal.style.display = "none"; } });
+
+        // --- ЛОГИКА ФИЛЬТРАЦИИ ПО ТЕГАМ ---
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const flowerCards = document.querySelectorAll(".flower-card");
+
+        filterButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                filterButtons.forEach(btn => btn.classList.remove("active"));
+                button.classList.add("active");
+
+                const filterValue = button.getAttribute("data-filter");
+
+                flowerCards.forEach(card => {
+                    const cardTags = card.getAttribute("data-tags").split(" ");
+
+                    if (filterValue === "all" || cardTags.includes(filterValue)) {
+                        card.style.display = "flex";
+                    } else {
+                        card.style.display = "none";
+                    }
                 });
             });
         });
-    </script>
+    });
+</script>
 </body>
 </html>

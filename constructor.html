@@ -74,7 +74,7 @@
         </div>
     
      <div class="component-row">
-            <img src="images/flowers /gorten.jpg" alt="Гортензия" class="preview-img">
+            <img src="images/flowers/gorten.jpg" alt="Гортензия" class="preview-img">
             <div class="component-info">
                 <label>Гортензия (160 сом/шт)</label>
                 <input type="number" class="flower-quantity" data-price="160" min="0" max="101" value="0">
@@ -138,36 +138,30 @@
 </section>
        <section class="form-box">
             <h2>Оформление доставки</h2>
-            <form id="orderForm" novalidate>
-                <div class="form-group">
-                    <label for="username">Ваше Имя *</label>
-                    <input type="text" id="username" placeholder="Минимум 2 буквы">
-                    <span class="error-msg" id="nameError"></span>
-                </div>
+           <form id="orderForm" action="process_order.php" method="POST" novalidate>
+    <input type="hidden" id="phpBouquetDetails" name="bouquet_details">
+    <input type="hidden" id="phpTotalPrice" name="total_price">
 
-                <div class="form-group">
-                    <label for="userphone">Номер телефона *</label>
-                    <input type="text" id="userphone" placeholder="0XXX XX XX XX">
-                    <span class="error-msg" id="phoneError"></span>
-                </div>
+    <div class="form-group">
+        <label for="username">Ваше Имя *</label>
+        <input type="text" id="username" name="name" placeholder="Минимум 2 буквы">
+        <span class="error-msg" id="nameError"></span>
+    </div>
 
-                <div class="form-group">
-                    <label for="address">Адрес доставки *</label>
-                    <input type="text" id="address" placeholder="Город, улица, дом">
-                    <span class="error-msg" id="addressError"></span>
-                </div>
-                
-                <div class="form-group">
-                    <label for="paymentMethod">Способ оплаты *</label>
-                    <select id="paymentMethod">
-                        <option value="cash">Наличными курьеру</option>
-                        <option value="o-dengi">О!Деньги / Элсом</option>
-                        <option value="card">Картой онлайн</option>
-                    </select>
-                </div>
+    <div class="form-group">
+        <label for="userphone">Номер телефона *</label>
+        <input type="text" id="userphone" name="phone" placeholder="0XXX XX XX XX">
+        <span class="error-msg" id="phoneError"></span>
+    </div>
 
-                <button type="submit" class="submit-btn">Подтвердить заказ</button>
-            </form>
+    <div class="form-group">
+        <label for="address">Адрес доставки *</label>
+        <input type="text" id="address" name="address" placeholder="Город, улица, дом">
+        <span class="error-msg" id="addressError"></span>
+    </div>
+
+    <button type="submit" class="submit-btn">Подтвердить заказ</button>
+</form>
         </section>
     </main>
 
