@@ -28,6 +28,7 @@
                     <h3>Монстера «Делициоза»</h3>
                     <p class="info">Цена: <span class="price">3200</span> сом</p>
                     <p class="description">Знаменитая тропическая лиана с огромными резными листьями. Идеальное декоративное решение для озеленения просторных комнат и офисов.</p>
+                      <button class="buy-btn" data-bouquet="Монстера «Делициоза»" data-price="3200">Оформить заказ</button>
                 </div>
             </div>
 
@@ -37,6 +38,7 @@
                     <h3>Калатея «Макоя»</h3>
                     <p class="info">Цена: <span class="price">1450</span> сом</p>
                     <p class="description">Декоративно-лиственное растение с завораживающим графичным узором на листьях. Вечером её листья эффектно поднимаются вверх.</p>
+                      <button class="buy-btn" data-bouquet="Калатея «Макоя»" data-price="1450">Оформить заказ</button>
                 </div>
             </div>
 
@@ -46,6 +48,7 @@
                     <h3>Фикус «Лирата Бамбино»</h3>
                     <p class="info">Цена: <span class="price">2800</span> сом</p>
                     <p class="description">Трендовое интерьерное растение с крупными листьями, напоминающими по форме скрипку. Формирует плотный, аккуратный куст.</p>
+                      <button class="buy-btn" data-bouquet="Фикус «Лирата Бамбино»" data-price="2800">Оформить заказ</button>
                 </div>
             </div>
 
@@ -55,11 +58,146 @@
                     <h3>Замиокулькас (Долларовое дерево)</h3>
                     <p class="info">Цена: <span class="price">1900</span> сом</p>
                     <p class="description">Суккулентное декоративное растение с глянцевыми, словно покрытыми воском листьями. Крайне неприхотливо в уходе и выносит полутень.</p>
+                      <button class="buy-btn" data-bouquet="Замиокулькас (Долларовое дерево)" data-price="1900">Оформить заказ</button>
                 </div>
             </div>
         </div>
 
     </main>
+<div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h3>Оформление заказа</h3>
+            <p id="modalBouquetInfo"></p>
+            
+            <form class="modal-form" id="fastOrderForm" action="process_order.php" method="POST" novalidate>
+                <input type="hidden" id="selectedBouquetName" name="bouquet_details">
+                <input type="hidden" id="selectedBouquetPrice" name="total_price">
 
+                <label>Ваше имя:
+                    <input type="text" id="username" name="name" placeholder="Введите ваше имя" required>
+                    <span class="error-msg" id="nameError"></span>
+                </label>
+                
+                <label>Телефон:
+                    <input type="tel" id="userphone" name="phone" placeholder="0707 12-34-56" required>
+                    <span class="error-msg" id="phoneError"></span>
+                </label>
+                
+                <label>Адрес доставки:
+                    <input type="text" id="address" name="address" placeholder="Улица, дом, квартира" required>
+                    <span class="error-msg" id="addressError"></span>
+                </label>
+                
+                <label>Способ оплаты:
+                    <select name="payment_method">
+                        <option value="cash">Наличными курьеру</option>
+                        <option value="o-dengi">О!Деньги / Элсом</option>
+                        <option value="card">Картой онлайн</option>
+                    </select>
+                </label>
+                <button type="submit" class="order-submit-btn">Подтвердить заказ</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const modal = document.getElementById("orderModal");
+            const closeModalBtn = document.getElementById("closeModal");
+            const modalBouquetInfo = document.getElementById("modalBouquetInfo");
+            
+            const form = document.getElementById("fastOrderForm");
+            const username = document.getElementById("username");
+            const userphone = document.getElementById("userphone");
+            const address = document.getElementById("address");
+            const hiddenNameInput = document.getElementById("selectedBouquetName");
+            const hiddenPriceInput = document.getElementById("selectedBouquetPrice");
+            
+            const buyButtons = document.querySelectorAll(".buy-btn");
+
+            buyButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const bouquetName = button.getAttribute("data-bouquet");
+                    const bouquetPrice = button.getAttribute("data-price");
+
+                    modalBouquetInfo.textContent = `Вы выбрали: ${bouquetName} (${bouquetPrice} сом)`;
+                    
+                    hiddenNameInput.value = `Декоративное растение: ${bouquetName}`;
+                    hiddenPriceInput.value = bouquetPrice;
+
+                    form.reset();
+                    document.getElementById("nameError").textContent = "";
+                    document.getElementById("phoneError").textContent = "";
+                    document.getElementById("addressError").textContent = "";
+
+                    modal.style.display = "flex";
+                });
+            });
+
+            // Маска телефона (0XXX XX-XX-XX)
+            userphone.addEventListener("input", (e) => {
+                let input = e.target.value.replace(/\D/g, "");
+                let formatted = "";
+
+                if (input.length > 0) {
+                    if (input[0] !== "0") {
+                        input = "0" + input;
+                    }
+                    formatted = input.substring(0, 10); 
+                }
+                
+                if (input.length > 4) { formatted = formatted.substring(0, 4) + " " + formatted.substring(4); }
+                if (input.length > 6) { formatted = formatted.substring(0, 7) + "-" + formatted.substring(7); }
+                if (input.length > 8) { formatted = formatted.substring(0, 10) + "-" + formatted.substring(10); }
+
+                e.target.value = formatted;
+            });
+
+            // Валидация перед отправкой формы в PHP
+            form.addEventListener("submit", (e) => {
+                e.preventDefault(); 
+                let isValid = true;
+
+                document.getElementById("nameError").textContent = "";
+                document.getElementById("phoneError").textContent = "";
+                document.getElementById("addressError").textContent = "";
+
+                const nameValue = username.value.trim();
+                if (nameValue.length < 2) {
+                    document.getElementById("nameError").textContent = "Ошибка: Имя слишком короткое (минимум 2 буквы)!";
+                    isValid = false;
+                } else if (nameValue.length > 30) {
+                    document.getElementById("nameError").textContent = "Ошибка: Имя не должно превышать 30 символов!";
+                    isValid = false;
+                }
+
+                const phoneDigits = userphone.value.replace(/\D/g, ""); 
+                if (phoneDigits.length !== 10) {
+                    document.getElementById("phoneError").textContent = "Ошибка: Номер должен состоять ровно из 10 цифр!";
+                    isValid = false;
+                }
+
+                const addressValue = address.value.trim();
+                if (addressValue === "") {
+                    document.getElementById("addressError").textContent = "Ошибка: Адрес доставки не может быть пустым!";
+                    isValid = false;
+                } else if (addressValue.length < 10) {
+                    document.getElementById("addressError").textContent = "Ошибка: Напишите подробнее (минимум 10 символов)!";
+                    isValid = false;
+                }
+
+                // Перенаправляем на PHP-сервер, если всё валидно
+                if (isValid) {
+                    modal.style.display = "none";
+                    form.submit(); 
+                }
+            });
+
+            closeModalBtn.addEventListener("click", () => { modal.style.display = "none"; });
+            window.addEventListener("click", (event) => { if (event.target === modal) { modal.style.display = "none"; } });
+        });
+    </script>
 </body>
 </html>
+
