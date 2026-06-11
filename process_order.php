@@ -1,7 +1,7 @@
 <?php
 // Настройки Телеграма (Вставь сюда свои данные!)
-define('TELEGRAM_TOKEN', 'СЮДА_ВСТАВЬ_ТОКЕН_ОТ_BOTFATHER');
-define('TELEGRAM_CHAT_ID', 'СЮДА_ВСТАВЬ_ID_ИЗ_USERINFOBOT');
+define('TELEGRAM_TOKEN', '8868063431:AAGqTljQJvqVyKaq0IUKCsAVUYT3bg_Z83I');
+define('TELEGRAM_CHAT_ID', '5722802183');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
@@ -15,10 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($name) || empty($phone) || empty($address)) {
         die("Ошибка: Заполните все поля!");
     }
-
+    date_default_timezone_set('Asia/Bishkek');
     // 2. Формируем текст для TXT-файла
     $fileContent = "=== НОВЫЙ ЗАКАЗ ЦВЕТОВ ===\n";
-    $fileContent .= "Дата и время: " . date("Y-m-d H:i:s") . "\n";
+    $fileContent .= "Дата и время: " . date("Y-m-d H:i") . "\n";
     $fileContent .= "Имя клиента: " . $name . "\n";
     $fileContent .= "Телефон: " . $phone . "\n";
     $fileContent .= "Адрес доставки: " . $address . "\n";
