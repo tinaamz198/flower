@@ -1,19 +1,55 @@
+<?php
+date_default_timezone_set('Asia/Bishkek');
+
+$db_host = 'localhost';
+$db_name = 'okii_flower_db';
+$db_user = 'root';
+$db_pass = '';
+
+try {
+    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4", $db_user, $db_pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Вытаскиваем только те б/у букеты, которые получили статус 'одобрен'
+    $stmt = $pdo->prepare("SELECT * FROM flowers WHERE is_used = 1 AND status = 'одобрен' ORDER BY id DESC");
+    $stmt->execute();
+    $usedFlowers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    // Если база не подключена, сайт просто продолжит работать, но без б/у блока
+    $usedFlowers = [];
+}
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>Цветочный Рай — Главная</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Стили для блока Вторые руки, чтобы гармонично вписались в дизайн */
+        .used-flowers-section { padding: 50px 20px; max-width: 1200px; margin: 40px auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        .used-flowers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-top: 25px; }
+        .used-card { background: #fafdfa; border: 1px solid #e2ece3; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s; }
+        .used-card:hover { transform: translateY(-5px); }
+        .used-img-container { width: 100%; height: 240px; background: #eaeea422; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .used-img { width: 100%; height: 100%; object-fit: cover; }
+        .used-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+        .used-badge { background: #e2ece3; color: #47824b; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; align-self: flex-start; margin-bottom: 10px; }
+        .used-title { margin: 5px 0; color: #222; font-size: 18px; }
+        .used-desc { color: #666; font-size: 14px; margin: 10px 0; line-height: 1.4; flex-grow: 1; }
+        .used-price-box { font-size: 20px; font-weight: bold; color: #47824b; margin-bottom: 15px; text-align: left; }
+    </style>
 </head>
 <body>
 
     <header class="main-header">
         <div class="logo">🌸 Цветочный Окии</div>
         <nav class="nav-menu">
-            <a href="index.html" class="active">Главная</a>
+            <a href="index.php" class="active">Главная</a>
             <a href="indoor.html">Комнатные растения</a>
             <a href="garden.html">Садовые цветы</a>
             <a href="decor.html">Декоративные растения</a>
+            <a href="profile.php" style="background: #47824b; color: white; padding: 5px 15px; border-radius: 20px; margin-left: 15px;">Профиль / Вход</a>
         </nav>
     </header>
 
@@ -122,6 +158,36 @@
             </div>
         </div>
 
+        <section class="used-flowers-section">
+            <h2 style="color: #47824b; text-align: center; margin-bottom: 10px;">♻️ Витрина «Вторые руки»</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">Подаренные букеты от обычных людей по сниженной цене</p>
+            
+            <?php if (empty($usedFlowers)): ?>
+                <p style="text-align: center; color: #999; font-style: italic; padding: 20px;">На данный момент все б/у букеты распроданы. Вы можете выставить свой в личном кабинете!</p>
+            <?php else: ?>
+                <div class="used-flowers-grid">
+                    <?php foreach ($usedFlowers as $flower): ?>
+                        <div class="used-card">
+                            <div class="used-img-container">
+                                <?php if ($flower['image_blob']): ?>
+                                    <img class="used-img" src="data:image/jpeg;base64,<?php echo base64_encode($flower['image_blob']); ?>" alt="Букет б/у">
+                                <?php else: ?>
+                                    <span style="color: #aaa;">Фото отсутствует</span>
+                                <?php endif; ?>
+                            </div>
+                            <div class="used-content">
+                                <span class="used-badge">Вторые руки</span>
+                                <h3 class="used-title"><?php echo $flower['name']; ?></h3>
+                                <p class="used-desc"><?php echo $flower['description']; ?></p>
+                                <div class="used-price-box"><?php echo $flower['price']; ?> сом</div>
+                                <button class="buy-btn" data-bouquet="Б/У: <?php echo $flower['name']; ?>" data-price="<?php echo $flower['price']; ?>" style="width: 100%; background: #47824b; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold;">Купить букет</button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </section>
+
         <div class="action-box">
             <p>Хотите что-то особенное?</p>
             <a href="constructor.html" class="cta-btn">🌸 Собрать свой букет</a>
@@ -167,7 +233,6 @@
 
    <script>
     document.addEventListener("DOMContentLoaded", () => {
-        // --- КОД ДЛЯ МОДАЛЬНОГО ОКНА И ВАЛИДАЦИИ ФОРМЫ ---
         const modal = document.getElementById("orderModal");
         const closeModalBtn = document.getElementById("closeModal");
         const modalBouquetInfo = document.getElementById("modalBouquetInfo");
@@ -179,17 +244,16 @@
         const hiddenNameInput = document.getElementById("selectedBouquetName");
         const hiddenPriceInput = document.getElementById("selectedBouquetPrice");
         
-        const buyButtons = document.querySelectorAll(".buy-btn");
-
-        buyButtons.forEach(button => {
-            button.addEventListener("click", () => {
+        // Переназначаем слушатель кнопок динамически, чтобы он работал и для новых б/у карточек
+        document.body.addEventListener("click", (e) => {
+            if (e.target && e.target.classList.contains("buy-btn")) {
+                const button = e.target;
                 const bouquetName = button.getAttribute("data-bouquet");
                 const bouquetPrice = button.getAttribute("data-price");
 
                 modalBouquetInfo.textContent = `Вы выбрали: ${bouquetName} (${bouquetPrice} сом)`;
                 
-                // Передаем в скрытые инпуты данные о выбранном готовом букете
-                hiddenNameInput.value = `Готовый вариант: ${bouquetName}`;
+                hiddenNameInput.value = bouquetName.includes("Б/У:") ? bouquetName : `Готовый вариант: ${bouquetName}`;
                 hiddenPriceInput.value = bouquetPrice;
 
                 form.reset();
@@ -198,10 +262,10 @@
                 document.getElementById("addressError").textContent = "";
 
                 modal.style.display = "flex";
-            });
+            }
         });
 
-        // МАСКА ДЛЯ ТЕЛЕФОНА (Форматирует строго под ваши правила)
+        // МАСКА ДЛЯ ТЕЛЕФОНА
         userphone.addEventListener("input", (e) => {
             let input = e.target.value.replace(/\D/g, "");
             let formatted = "";
@@ -222,7 +286,7 @@
 
         // ВАЛИДАЦИЯ И ОТПРАВКА НА СЕРВЕР
         form.addEventListener("submit", (e) => {
-            e.preventDefault(); // Запрещаем стандартную отправку ради валидации
+            e.preventDefault(); 
             
             let isValid = true;
 
@@ -254,17 +318,16 @@
                 isValid = false;
             }
 
-            // ЕСЛИ ВСЁ ПРАВИЛЬНО — ФОРМА УЛЕТАЕТ В PROCESS_ORDER.PHP
             if (isValid) {
                 modal.style.display = "none";
-                form.submit(); // Метод принудительной отправки формы на бэкенд
+                form.submit(); 
             }
         });
 
         closeModalBtn.addEventListener("click", () => { modal.style.display = "none"; });
         window.addEventListener("click", (event) => { if (event.target === modal) { modal.style.display = "none"; } });
 
-        // --- ЛОГИКА ФИЛЬТРАЦИИ ПО ТЕГАМ ---
+        // ЛОГИКА ФИЛЬТРАЦИИ ПО ТЕГАМ
         const filterButtons = document.querySelectorAll(".filter-btn");
         const flowerCards = document.querySelectorAll(".flower-card");
 
