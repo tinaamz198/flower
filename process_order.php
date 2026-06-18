@@ -1,5 +1,6 @@
 <?php
 date_default_timezone_set('Asia/Bishkek');
+require_once 'vendor/crypto.php';
 
 define('TELEGRAM_TOKEN', '8868063431:AAGqTljQJvqVyKaq0IUKCsAVUYT3bg_Z83I');
 define('TELEGRAM_CHAT_ID', '5722802183');
@@ -20,20 +21,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Ошибка: Заполните все поля!");
     }
 
-    try {
+ try {
         $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4", $db_user, $db_pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
         $fio_fake = "Тестовый Клиент (" . $name . ")";
         $email_fake = "test_" . time() . "@mail.ru";
         
-      $stmtUser = $pdo->prepare("INSERT INTO users (full_name, email, phone, password_hash, role) 
-                           VALUES (?, ?, ?, ?, 'user') 
-                           ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)");
-$stmtUser->execute([encryptData($fio_fake), encryptData($email_fake), $phone, 'empty_hash']);
-                    $userId = $pdo->lastInsertId();
+        // 1. Сначала вставляем пользователя
+        $stmtUser = $pdo->prepare("INSERT INTO users (full_name, email, phone, password_hash, role) VALUES (?, ?, ?, ?, 'user')");
+        $stmtUser->execute([encryptData($fio_fake), encryptData($email_fake), $phone, 'empty_hash']);
+        
+        // 2. Получаем ID ТОЛЬКО ЧТО СОЗДАННОГО пользователя
+        $userId = $pdo->lastInsertId();
+
+        // 3. Вставляем цветок
         $stmtFlower = $pdo->prepare("INSERT INTO flowers (name, price, description, status, is_used) VALUES (?, ?, ?, 'в наличии', 0)");
         $stmtFlower->execute([$bouquetDetails, $totalPrice, 'Заказ из конструктора']);
-                                            $flowerId = $pdo->lastInsertId();
+        $flowerId = $pdo->lastInsertId();
+
+        // 4. Вставляем заказ
         $orderDate = date("Y-m-d H:i:s");
         $paymentMethod = "Наличные/Карта";
         $sqlOrder = "INSERT INTO orders (user_id, flower_id, order_date, delivery_address, payment_method, order_status) 
@@ -54,10 +61,9 @@ $stmtUser->execute([encryptData($fio_fake), encryptData($email_fake), $phone, 'e
         $isSaved = true;
 
     } catch (PDOException $e) {
-                $isSaved = false;
+        $isSaved = false;
         die("Ошибка Базы Данных: " . $e->getMessage());
     }
-
     $tgMessage = "🔔 *НОВЫЙ ЗАКАЗ В БАЗЕ ДАННЫХ MySQL*\n\n";
     $tgMessage .= "👤 *Клиент:* " . $name . "\n";
     $tgMessage .= "📞 *Телефон:* " . $phone . "\n";
