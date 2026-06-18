@@ -10,7 +10,6 @@ $db_user = 'root';
 $db_pass = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
     $name = isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : '';
     $phone = isset($_POST['phone']) ? htmlspecialchars(trim($_POST['phone'])) : '';
     $address = isset($_POST['address']) ? htmlspecialchars(trim($_POST['address'])) : '';
@@ -21,103 +20,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Ошибка: Заполните все поля!");
     }
 
- try {
+    try {
         $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4", $db_user, $db_pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
-        $fio_fake = "Тестовый Клиент (" . $name . ")";
-        $email_fake = "test_" . time() . "@mail.ru";
-        
-        // 1. Сначала вставляем пользователя
-        $stmtUser = $pdo->prepare("INSERT INTO users (full_name, email, phone, password_hash, role) VALUES (?, ?, ?, ?, 'user')");
-        $stmtUser->execute([encryptData($fio_fake), encryptData($email_fake), $phone, 'empty_hash']);
-        
-        // 2. Получаем ID ТОЛЬКО ЧТО СОЗДАННОГО пользователя
-        $userId = $pdo->lastInsertId();
 
-        // 3. Вставляем цветок
-        $stmtFlower = $pdo->prepare("INSERT INTO flowers (name, price, description, status, is_used) VALUES (?, ?, ?, 'в наличии', 0)");
+        session_start();
+        $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 1; 
+
+        // Вставка с учетом новых полей (is_ready=0 для заказов, kanban_status=todo)
+        $stmtFlower = $pdo->prepare("INSERT INTO flowers (name, price, description, status, is_used, is_ready, kanban_status) 
+                                     VALUES (?, ?, ?, 'на модерации', 0, 0, 'todo')");
         $stmtFlower->execute([$bouquetDetails, $totalPrice, 'Заказ из конструктора']);
         $flowerId = $pdo->lastInsertId();
 
-        // 4. Вставляем заказ
-        $orderDate = date("Y-m-d H:i:s");
-        $paymentMethod = "Наличные/Карта";
         $sqlOrder = "INSERT INTO orders (user_id, flower_id, order_date, delivery_address, payment_method, order_status) 
-                     VALUES (:user_id, :flower_id, :order_date, :address, :payment, 'Принят')";
+                      VALUES (:user_id, :flower_id, NOW(), :address, 'Наличные', 'Принят')";
         
         $stmtOrder = $pdo->prepare($sqlOrder);
-        $stmtOrder->execute([
-            ':user_id' => $userId,
-            ':flower_id' => $flowerId,
-            ':order_date' => $orderDate,
-            ':address' => $address,
-            ':payment' => $paymentMethod
-        ]);
+        $stmtOrder->execute([':user_id' => $userId, ':flower_id' => $flowerId, ':address' => $address]);
 
-        $stmtLog = $pdo->prepare("INSERT INTO audit_logs (user_id, action_time, action_type, result) VALUES (?, ?, ?, ?)");
-        $stmtLog->execute([$userId, $orderDate, 'Оформление заказа через сайт', 'Успешно']);
-
-        $isSaved = true;
-
+        $stmtLog = $pdo->prepare("INSERT INTO audit_logs (user_id, action_time, action_type, result) VALUES (?, NOW(), ?, 'Успешно')");
+        $stmtLog->execute([$userId, 'Оформление заказа через сайт']);
     } catch (PDOException $e) {
-        $isSaved = false;
         die("Ошибка Базы Данных: " . $e->getMessage());
     }
-    $tgMessage = "🔔 *НОВЫЙ ЗАКАЗ В БАЗЕ ДАННЫХ MySQL*\n\n";
-    $tgMessage .= "👤 *Клиент:* " . $name . "\n";
-    $tgMessage .= "📞 *Телефон:* " . $phone . "\n";
-    $tgMessage .= "📍 *Адрес:* " . $address . "\n";
-    $tgMessage .= "-------------------------\n";
-    $tgMessage .= $bouquetDetails . "\n";
-    $tgMessage .= "-------------------------\n";
-    $tgMessage .= "💰 *Итого:* " . $totalPrice . " сом\n\n";
-    $tgMessage .= "✅ Запись успешно добавлена в таблицу `orders`.";
 
+    $tgMessage = "🔔 *НОВЫЙ ЗАКАЗ*\n👤 Клиент: $name\n💰 Сумма: $totalPrice сом\n✅ Добавлен в Kanban (Todo)";
     $url = "https://api.telegram.org/bot" . TELEGRAM_TOKEN . "/sendMessage";
-    $data = [
-        'chat_id' => TELEGRAM_CHAT_ID,
-        'text' => $tgMessage,
-        'parse_mode' => 'Markdown'
-    ];
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(['chat_id' => TELEGRAM_CHAT_ID, 'text' => $tgMessage, 'parse_mode' => 'Markdown']));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_exec($ch);
     curl_close($ch);
-
-    if ($isSaved) {
-        echo "
-        <!DOCTYPE html>
-        <html lang='ru'>
-        <head>
-            <meta charset='UTF-8'>
-            <title>Заказ принят</title>
-            <style>
-                body { font-family: Arial, sans-serif; background-color: #f4f7f4; text-align: center; padding-top: 100px; color: #333; }
-                .success-box { background: white; padding: 40px; border-radius: 12px; display: inline-block; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-                h1 { color: #47824b; }
-                p { font-size: 16px; margin: 10px 0; }
-                a { display: inline-block; margin-top: 20px; background: #47824b; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; }
-                a:hover { background: #3b6b3e; }
-            </style>
-        </head>
-        <body>
-            <div class='success-box'>
-                <h1>🌸 Заказ успешно сохранен в БД!</h1>
-                <p>Данные успешно записаны в таблицы MySQL и отправлены администратору.</p>
-                <p>Сумма к оплате: <strong>$totalPrice сом</strong></p>
-                        <a href='index.php'>На главную страницу</a>
-            </div>
-        </body>
-        </html>
-        ";
-    }
-} else {
-    echo "Доступ запрещен.";
-}
 ?>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css"> 
+    <title>Ваш заказ принят</title>
+    <style>
+        .container { max-width: 600px; margin: 50px auto; padding: 30px; background: #fff; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        .btn { background: #47824b; color: #fff; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌸 Спасибо, <?php echo $name; ?>!</h1>
+        <p>Ваш заказ на сумму <strong><?php echo $totalPrice; ?> сом</strong> успешно принят.</p>
+        <p>Наш флорист уже получил уведомление и приступает к сборке вашего букета.</p>
+        <a href="index.php" class="btn">Вернуться к конструктору</a>
+    </div>
+</body>
+</html>
+<?php } ?>
