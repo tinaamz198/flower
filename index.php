@@ -10,12 +10,10 @@ try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4", $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Вытаскиваем только те б/у букеты, которые получили статус 'одобрен'
     $stmt = $pdo->prepare("SELECT * FROM flowers WHERE is_used = 1 AND status = 'одобрен' ORDER BY id DESC");
     $stmt->execute();
     $usedFlowers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    // Если база не подключена, сайт просто продолжит работать, но без б/у блока
     $usedFlowers = [];
 }
 ?>
@@ -26,7 +24,6 @@ try {
     <title>Цветочный Рай — Главная</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* Стили для блока Вторые руки, чтобы гармонично вписались в дизайн */
         .used-flowers-section { padding: 50px 20px; max-width: 1200px; margin: 40px auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
         .used-flowers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-top: 25px; }
         .used-card { background: #fafdfa; border: 1px solid #e2ece3; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s; }
@@ -244,7 +241,6 @@ try {
         const hiddenNameInput = document.getElementById("selectedBouquetName");
         const hiddenPriceInput = document.getElementById("selectedBouquetPrice");
         
-        // Переназначаем слушатель кнопок динамически, чтобы он работал и для новых б/у карточек
         document.body.addEventListener("click", (e) => {
             if (e.target && e.target.classList.contains("buy-btn")) {
                 const button = e.target;
@@ -264,8 +260,6 @@ try {
                 modal.style.display = "flex";
             }
         });
-
-        // МАСКА ДЛЯ ТЕЛЕФОНА
         userphone.addEventListener("input", (e) => {
             let input = e.target.value.replace(/\D/g, "");
             let formatted = "";
@@ -283,8 +277,6 @@ try {
 
             e.target.value = formatted;
         });
-
-        // ВАЛИДАЦИЯ И ОТПРАВКА НА СЕРВЕР
         form.addEventListener("submit", (e) => {
             e.preventDefault(); 
             
@@ -326,8 +318,6 @@ try {
 
         closeModalBtn.addEventListener("click", () => { modal.style.display = "none"; });
         window.addEventListener("click", (event) => { if (event.target === modal) { modal.style.display = "none"; } });
-
-        // ЛОГИКА ФИЛЬТРАЦИИ ПО ТЕГАМ
         const filterButtons = document.querySelectorAll(".filter-btn");
         const flowerCards = document.querySelectorAll(".flower-card");
 

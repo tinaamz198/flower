@@ -10,7 +10,7 @@
     <header class="main-header">
         <div class="logo">🌸 Цветочный Окии</div>
         <nav class="nav-menu">
-            <a href="index.html">Главная</a>
+            <a href="index.php">Главная</a>
             <a href="indoor.html">Комнатные растения</a>
             <a href="garden.html" class="active">Садовые цветы</a>
             <a href="decor.html">Декоративные растения</a>
@@ -138,8 +138,6 @@
                     modal.style.display = "flex";
                 });
             });
-
-            // Маска телефона (0XXX XX-XX-XX)
             userphone.addEventListener("input", (e) => {
                 let input = e.target.value.replace(/\D/g, "");
                 let formatted = "";
@@ -157,8 +155,6 @@
 
                 e.target.value = formatted;
             });
-
-            // Валидация перед отправкой формы в PHP
             form.addEventListener("submit", (e) => {
                 e.preventDefault(); 
                 let isValid = true;
@@ -191,7 +187,6 @@
                     isValid = false;
                 }
 
-                // Перенаправляем на PHP-сервер, если всё валидно
                 if (isValid) {
                     modal.style.display = "none";
                     form.submit(); 

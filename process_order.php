@@ -1,12 +1,8 @@
 <?php
-// 1. Устанавливаем часовой пояс Бишкека
 date_default_timezone_set('Asia/Bishkek');
 
-// Настройки Телеграма
 define('TELEGRAM_TOKEN', '8868063431:AAGqTljQJvqVyKaq0IUKCsAVUYT3bg_Z83I');
 define('TELEGRAM_CHAT_ID', '5722802183');
-
-// Параметры подключения к базе данных MySQL (XAMPP)
 $db_host = 'localhost';
 $db_name = 'okii_flower_db';
 $db_user = 'root';
@@ -14,7 +10,6 @@ $db_pass = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    // 2. Принимаем и очищаем данные из формы
     $name = isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : '';
     $phone = isset($_POST['phone']) ? htmlspecialchars(trim($_POST['phone'])) : '';
     $address = isset($_POST['address']) ? htmlspecialchars(trim($_POST['address'])) : '';
@@ -26,32 +21,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        // 3. Подключаемся к базе данных через PDO
         $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4", $db_user, $db_pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // --- ВРЕМЕННЫЙ КОСТЫЛЬ ДЛЯ ТЕСТА (Пока нет авторизации) ---
-        // Так как пользователь еще не вошел через личный кабинет, мы временно 
-        // создадим виртуального пользователя в базе, чтобы заказ не выдавал ошибку ключа.
         $fio_fake = "Тестовый Клиент (" . $name . ")";
         $email_fake = "test_" . time() . "@mail.ru";
         
-        $stmtUser = $pdo->prepare("INSERT INTO users (fio_encrypted, email_encrypted, phone_encrypted, password_hash, role) 
-                                   VALUES (?, ?, ?, ?, 'user') 
-                                   ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)");
-        $stmtUser->execute([$fio_fake, $email_fake, $phone, 'static_hash_or_empty']);
-        $userId = $pdo->lastInsertId();
-
-        // Создаем временную запись цветка в базе под этот заказ
+      $stmtUser = $pdo->prepare("INSERT INTO users (full_name, email, phone, password_hash, role) 
+                           VALUES (?, ?, ?, ?, 'user') 
+                           ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)");
+$stmtUser->execute([encryptData($fio_fake), encryptData($email_fake), $phone, 'empty_hash']);
+                    $userId = $pdo->lastInsertId();
         $stmtFlower = $pdo->prepare("INSERT INTO flowers (name, price, description, status, is_used) VALUES (?, ?, ?, 'в наличии', 0)");
         $stmtFlower->execute([$bouquetDetails, $totalPrice, 'Заказ из конструктора']);
-        $flowerId = $pdo->lastInsertId();
-        // ---------------------------------------------------------
-
-        // 4. ЗАПИСЬ ЗАКАЗА В БАЗУ ДАННЫХ
+                                            $flowerId = $pdo->lastInsertId();
         $orderDate = date("Y-m-d H:i:s");
         $paymentMethod = "Наличные/Карта";
-
         $sqlOrder = "INSERT INTO orders (user_id, flower_id, order_date, delivery_address, payment_method, order_status) 
                      VALUES (:user_id, :flower_id, :order_date, :address, :payment, 'Принят')";
         
@@ -64,19 +48,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ':payment' => $paymentMethod
         ]);
 
-        // 5. ЗАПИСЬ В ЖУРНАЛ АУДИТА (Требование ТЗ!)
         $stmtLog = $pdo->prepare("INSERT INTO audit_logs (user_id, action_time, action_type, result) VALUES (?, ?, ?, ?)");
         $stmtLog->execute([$userId, $orderDate, 'Оформление заказа через сайт', 'Успешно']);
 
         $isSaved = true;
 
     } catch (PDOException $e) {
-        $isSaved = false;
-        // Если база упала, пишем ошибку
+                $isSaved = false;
         die("Ошибка Базы Данных: " . $e->getMessage());
     }
 
-    // 6. ОТПРАВКА В ТЕЛЕГРАМ (Оставляем твою рабочую логику)
     $tgMessage = "🔔 *НОВЫЙ ЗАКАЗ В БАЗЕ ДАННЫХ MySQL*\n\n";
     $tgMessage .= "👤 *Клиент:* " . $name . "\n";
     $tgMessage .= "📞 *Телефон:* " . $phone . "\n";
@@ -103,7 +84,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     curl_exec($ch);
     curl_close($ch);
 
-    // 7. Выводим пользователю страницу успеха
     if ($isSaved) {
         echo "
         <!DOCTYPE html>
@@ -125,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h1>🌸 Заказ успешно сохранен в БД!</h1>
                 <p>Данные успешно записаны в таблицы MySQL и отправлены администратору.</p>
                 <p>Сумма к оплате: <strong>$totalPrice сом</strong></p>
-                <a href='index.html'>На главную страницу</a>
+                        <a href='index.php'>На главную страницу</a>
             </div>
         </body>
         </html>

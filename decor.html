@@ -135,7 +135,6 @@
                 });
             });
 
-            // Маска телефона (0XXX XX-XX-XX)
             userphone.addEventListener("input", (e) => {
                 let input = e.target.value.replace(/\D/g, "");
                 let formatted = "";
@@ -154,7 +153,6 @@
                 e.target.value = formatted;
             });
 
-            // Валидация перед отправкой формы в PHP
             form.addEventListener("submit", (e) => {
                 e.preventDefault(); 
                 let isValid = true;
@@ -187,7 +185,6 @@
                     isValid = false;
                 }
 
-                // Перенаправляем на PHP-сервер, если всё валидно
                 if (isValid) {
                     modal.style.display = "none";
                     form.submit(); 
